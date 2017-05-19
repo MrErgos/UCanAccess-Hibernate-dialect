@@ -4,7 +4,6 @@
 	<groupId>com.gordthompson.ucanaccess</groupId>
 	<artifactId>ucanaccess-hibernate-dialect</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
 
 	<name>UCanAccess Hibernate dialect</name>
 	<description>A Hibernate dialect for the UCanAccess JDBC driver.</description>
@@ -14,6 +13,7 @@
 		<maven.deploy.skip>true</maven.deploy.skip>
 	</properties>
 
+	<!--
 	<modules>
 		<module>basic</module>
 		<module>annotations</module>
@@ -21,6 +21,7 @@
 		<module>envers</module>
 		<module>osgi</module>
 	</modules>
+	-->
 
 	<dependencies>
 		<dependency>
@@ -44,7 +45,6 @@
 			<version>4.12</version>
 		</dependency>
 
-		<!-- The tutorials use the H2 in-memory database -->
 		<dependency>
 			<groupId>net.sf.ucanaccess</groupId>
 			<artifactId>ucanaccess</artifactId>
