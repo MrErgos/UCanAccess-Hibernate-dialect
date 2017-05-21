@@ -30,6 +30,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 @Entity
@@ -37,16 +38,40 @@ import javax.persistence.Table;
 public class Event {
 	@Id
 	@Column(name = "EVENT_ID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue  // (currently not working)
+//	@GeneratedValue (strategy = GenerationType.AUTO)  // (currently not working)
+	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	// previously (before adding IdentityColumnSupport) ...
 	// @GenericGenerator(name="Event_AutoNumber_generator", strategy="increment")
 	// @GeneratedValue(generator="Event_AutoNumber_generator")
 	private Integer id;
+	public Integer getId() { return id; }
+	@SuppressWarnings("unused")
+	private void setId(Integer id) { this.id = id; }
 
-	private String title;
-
-	@Column(name = "EVENT_DATE")
+	// Access databases *often* have spaces in column names
+	// ... see "globally_quoted_identifiers" property in hibernate.cfg.xml
+	@Column(name = "EVENT DATE")
 	private Date date;
+	public Date getDate() { return date; }
+	public void setDate(Date date) { this.date = date; }
+
+	// limited-length String -> VARCHAR(100) [via Hibernate] -> TEXT(100) [via UCanAccess]
+	@Column(length = 100)
+	private String title;
+	public String getTitle() { return title; }
+	public void setTitle(String title) { this.title = title; }
+	
+	// unspecified-length String -> VARCHAR(255) [via Hibernate] -> TEXT(255) [via UCanAccess]
+	private String description;
+	public String getDescription() { return description; }
+	public void setDescription(String description) { this.description = description; }
+	
+	// @Lob: unlimited-length String -> CLOB (via Hibernate) -> MEMO (via UCanAccess)
+	@Lob
+	private String comments;
+	public String getComments() { return comments; }
+	public void setComments(String comments) { this.comments = comments; }
 
 	public Event() {
 		// this form used by Hibernate
@@ -58,28 +83,4 @@ public class Event {
 		this.date = date;
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	@SuppressWarnings("unused")
-	private void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
 }

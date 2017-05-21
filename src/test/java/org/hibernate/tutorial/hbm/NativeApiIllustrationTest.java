@@ -23,6 +23,7 @@
  */
 package org.hibernate.tutorial.hbm;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,6 +34,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.query.Query;
 
 import junit.framework.TestCase;
 
@@ -75,25 +77,42 @@ public class NativeApiIllustrationTest extends TestCase {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		session.save( new Event( "Our very first event!", getCurrentTimestampWithoutMilliseconds() ) );
-		try {
-			Thread.sleep(1000);  // ensure next timestamp is different
-		} catch (InterruptedException e) { }  // ignore
-		session.save( new Event( "A follow up event", getCurrentTimestampWithoutMilliseconds() ) );
+		int new_id = (int) session.save( new Event( "A follow up event", null ) );
+		assertEquals(2, new_id);
 		session.getTransaction().commit();
 		session.close();
 
+		// verify that registerFunction is mapping HQL "current_date()" to Access "Date()"
+		// also test concat() HQL function (maps to '+' operator)
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+		Query<?> qry = session.createQuery(
+				"update Event set date=current_date(), title=concat('event', '2') where id=2");
+		qry.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		
 		// now lets pull events from the database and list them
 		session = sessionFactory.openSession();
 		session.beginTransaction();
 		List<Event> result = session.createQuery( "from Event" ).list();
 		for ( Event event : (List<Event>) result ) {
 			System.out.println( "Event (" + event.getDate() + ") : " + event.getTitle() );
+			if (event.getId() == 2) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(event.getDate());
+				assertTrue(cal.get(Calendar.HOUR_OF_DAY) == 0 
+						&& cal.get(Calendar.MINUTE) == 0 
+						&& cal.get(Calendar.SECOND) == 0);
+			}
 		}
 		session.getTransaction().commit();
 		session.close();
 	}
 	
 	private static Date getCurrentTimestampWithoutMilliseconds() {
+		// avoid issues with plain `new Date()` including milliseconds
+		// UCanAccess will save the value OK, but Access itself doesn't really support them
 		Date rtn = new Date();
 		rtn.setTime(rtn.getTime() / 1000L * 1000L);
 		return rtn;

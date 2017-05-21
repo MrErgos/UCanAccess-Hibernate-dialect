@@ -25,13 +25,18 @@ public class UCanAccessDialect extends SQLServerDialect {
 	public UCanAccessDialect() {
 		super();
 		registerColumnType(Types.INTEGER, "LONG");
+		registerColumnType(Types.CLOB, "MEMO");
 
 		registerFunction("current_date", new StandardSQLFunction("Date"));
 		registerFunction("current_time", new StandardSQLFunction("Time"));
 		registerFunction("current_timestamp", new StandardSQLFunction("Now"));
 	}
-
-	// this is apparently how it was done in older versions of Hibernate
+	
+	// -----------------------
+	// IDENTITY column support
+	// -----------------------
+	//
+	// This is apparently how it was done in older versions of Hibernate:
 	//
 	// public boolean supportsIdentityColumns() {
 	// return true;
@@ -45,10 +50,11 @@ public class UCanAccessDialect extends SQLServerDialect {
 	// return "COUNTER";
 	// }
 
-	private static final UCanAccessDialectIdentityColumnSupport IDENTITY_COLUMN_SUPPORT = new UCanAccessDialectIdentityColumnSupport();
-
+	private static final UCanAccessDialectIdentityColumnSupport IDENTITY_COLUMN_SUPPORT = 
+			new UCanAccessDialectIdentityColumnSupport();
 	@Override
 	public IdentityColumnSupport getIdentityColumnSupport() {
 		return (IdentityColumnSupport) IDENTITY_COLUMN_SUPPORT;
 	}
+	
 }
