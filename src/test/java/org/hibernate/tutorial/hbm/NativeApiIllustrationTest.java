@@ -23,6 +23,8 @@
  */
 package org.hibernate.tutorial.hbm;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -72,11 +74,12 @@ public class NativeApiIllustrationTest extends TestCase {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void testBasicUsage() {
+	public void testBasicUsage() throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		// create a couple of events...
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		session.save( new Event( "Our very first event!", getCurrentTimestampWithoutMilliseconds() ) );
+		session.save( new Event( "Our very first event!", sdf.parse("2017-05-21 14:15:16") ) );
 		int new_id = (int) session.save( new Event( "A follow up event", null ) );
 		assertEquals(2, new_id);
 		session.getTransaction().commit();
@@ -108,13 +111,16 @@ public class NativeApiIllustrationTest extends TestCase {
 		}
 		session.getTransaction().commit();
 		session.close();
+	
+		// test re-mapping of hour() and related HQL functions
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+		int hr = (Integer) session.createQuery(
+				"select hour(date) from Event where id=1").uniqueResult();
+		assertEquals(14, hr);
+		session.getTransaction().commit();
+		session.close();
+		
 	}
 	
-	private static Date getCurrentTimestampWithoutMilliseconds() {
-		// avoid issues with plain `new Date()` including milliseconds
-		// UCanAccess will save the value OK, but Access itself doesn't really support them
-		Date rtn = new Date();
-		rtn.setTime(rtn.getTime() / 1000L * 1000L);
-		return rtn;
-	}
 }

@@ -18,8 +18,10 @@ package org.hibernate.custom.dialect.ucanaccess;
 import java.sql.Types;
 
 import org.hibernate.dialect.SQLServerDialect;
+import org.hibernate.dialect.function.SQLFunctionTemplate;
 import org.hibernate.dialect.function.StandardSQLFunction;
 import org.hibernate.dialect.identity.IdentityColumnSupport;
+import org.hibernate.type.StandardBasicTypes;
 
 public class UCanAccessDialect extends SQLServerDialect {
 	public UCanAccessDialect() {
@@ -27,9 +29,12 @@ public class UCanAccessDialect extends SQLServerDialect {
 		registerColumnType(Types.INTEGER, "LONG");
 		registerColumnType(Types.CLOB, "MEMO");
 
-		registerFunction("current_date", new StandardSQLFunction("Date"));
-		registerFunction("current_time", new StandardSQLFunction("Time"));
-		registerFunction("current_timestamp", new StandardSQLFunction("Now"));
+		registerFunction( "current_date", new StandardSQLFunction( "Date", StandardBasicTypes.DATE ) );
+		registerFunction( "current_time", new StandardSQLFunction( "Time", StandardBasicTypes.TIME ) );
+		registerFunction( "current_timestamp", new StandardSQLFunction( "Now", StandardBasicTypes.TIMESTAMP ) );
+		registerFunction( "second", new SQLFunctionTemplate( StandardBasicTypes.INTEGER, "Second(?1)" ) );
+		registerFunction( "minute", new SQLFunctionTemplate( StandardBasicTypes.INTEGER, "Minute(?1)" ) );
+		registerFunction( "hour", new SQLFunctionTemplate( StandardBasicTypes.INTEGER, "Hour(?1)" ) );
 	}
 	
 	// -----------------------
@@ -57,4 +62,11 @@ public class UCanAccessDialect extends SQLServerDialect {
 		return (IdentityColumnSupport) IDENTITY_COLUMN_SUPPORT;
 	}
 	
+	@Override
+	public boolean supportsSequences() {
+		// TODO Hibernate bug? It does call this method, but then it tries to use Sequences anyway.
+		// System.out.println("-> Hibernate is checking support for Sequences.");
+		return false;
+	}
+
 }

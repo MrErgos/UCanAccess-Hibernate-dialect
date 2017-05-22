@@ -33,10 +33,6 @@ public class UCanAccessDialectIdentityColumnSupport extends IdentityColumnSuppor
 		return "COUNTER";
 	}
 	
-	public boolean supportsSequences() {
-		return false;
-	}
-
 	/*
 	 * public boolean supportsInsertSelectIdentity() { return true; // As
 	 * specified in NHibernate dialect }
