@@ -29,12 +29,12 @@ public class UCanAccessDialect extends SQLServerDialect {
 		registerColumnType(Types.INTEGER, "LONG");
 		registerColumnType(Types.CLOB, "MEMO");
 
-		registerFunction( "current_date", new StandardSQLFunction( "Date", StandardBasicTypes.DATE ) );
-		registerFunction( "current_time", new StandardSQLFunction( "Time", StandardBasicTypes.TIME ) );
-		registerFunction( "current_timestamp", new StandardSQLFunction( "Now", StandardBasicTypes.TIMESTAMP ) );
-		registerFunction( "second", new SQLFunctionTemplate( StandardBasicTypes.INTEGER, "Second(?1)" ) );
-		registerFunction( "minute", new SQLFunctionTemplate( StandardBasicTypes.INTEGER, "Minute(?1)" ) );
-		registerFunction( "hour", new SQLFunctionTemplate( StandardBasicTypes.INTEGER, "Hour(?1)" ) );
+		registerFunction("current_date", new StandardSQLFunction("Date", StandardBasicTypes.DATE));
+		registerFunction("current_time", new StandardSQLFunction("Time", StandardBasicTypes.TIME));
+		registerFunction("current_timestamp", new StandardSQLFunction("Now", StandardBasicTypes.TIMESTAMP));
+		registerFunction("second", new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "Second(?1)"));
+		registerFunction("minute", new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "Minute(?1)"));
+		registerFunction("hour", new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "Hour(?1)"));
 	}
 	
 	// -----------------------

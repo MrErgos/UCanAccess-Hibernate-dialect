@@ -23,6 +23,7 @@
  */
 package org.hibernate.tutorial.hbm;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -72,6 +73,12 @@ public class Event {
 	private String comments;
 	public String getComments() { return comments; }
 	public void setComments(String comments) { this.comments = comments; }
+
+	// Currency (actually mapped to DECIMAL in Access)
+	@Column(precision = 19, scale = 4)  // required, otherwise defaults to (19,2)
+	private BigDecimal fee;
+	public BigDecimal getFee() { return fee; }
+	public void setFee(BigDecimal fee) { this.fee= fee; }
 
 	public Event() {
 		// this form used by Hibernate

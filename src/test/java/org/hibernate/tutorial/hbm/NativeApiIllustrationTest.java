@@ -23,10 +23,10 @@
  */
 package org.hibernate.tutorial.hbm;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,24 +51,24 @@ public class NativeApiIllustrationTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		Logger.getLogger("org.hibernate").setLevel(Level.WARNING);
-		
+
 		// A SessionFactory is set up once for an application!
 		final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
 				.configure() // configures settings from hibernate.cfg.xml
 				.build();
 		try {
-			sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
-		}
-		catch (Exception e) {
-			// The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
+			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+		} catch (Exception e) {
+			// The registry would be destroyed by the SessionFactory, but we had
+			// trouble building the SessionFactory
 			// so destroy it manually.
-			StandardServiceRegistryBuilder.destroy( registry );
+			StandardServiceRegistryBuilder.destroy(registry);
 		}
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
-		if ( sessionFactory != null ) {
+		if (sessionFactory != null) {
 			sessionFactory.close();
 		}
 	}
@@ -79,48 +79,74 @@ public class NativeApiIllustrationTest extends TestCase {
 		// create a couple of events...
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		session.save( new Event( "Our very first event!", sdf.parse("2017-05-21 14:15:16") ) );
-		int new_id = (int) session.save( new Event( "A follow up event", null ) );
+		session.save(new Event("Our very first event!", sdf.parse("2017-05-21 14:15:16")));
+		int new_id = (int) session.save(new Event("A follow up event", null));
 		assertEquals(2, new_id);
 		session.getTransaction().commit();
 		session.close();
 
-		// verify that registerFunction is mapping HQL "current_date()" to Access "Date()"
+		// verify that registerFunction is mapping HQL "current_date()" to
+		// Access "Date()"
 		// also test concat() HQL function (maps to '+' operator)
 		session = sessionFactory.openSession();
 		session.beginTransaction();
 		Query<?> qry = session.createQuery(
-				"update Event set date=current_date(), title=concat('event', '2') where id=2");
+				"update Event set date=current_date(), title=concat('event', '2'), fee=:newfee where id=2");
+		qry.setParameter("newfee", new BigDecimal("123.45"));
 		qry.executeUpdate();
 		session.getTransaction().commit();
 		session.close();
-		
+
 		// now lets pull events from the database and list them
 		session = sessionFactory.openSession();
 		session.beginTransaction();
-		List<Event> result = session.createQuery( "from Event" ).list();
-		for ( Event event : (List<Event>) result ) {
-			System.out.println( "Event (" + event.getDate() + ") : " + event.getTitle() );
+		List<Event> resultList = session.createQuery("from Event").list();
+		for (Event event : (List<Event>) resultList) {
+			System.out.println("Event (" + event.getDate() + ") : " + event.getTitle());
 			if (event.getId() == 2) {
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(event.getDate());
 				assertTrue(cal.get(Calendar.HOUR_OF_DAY) == 0 
-						&& cal.get(Calendar.MINUTE) == 0 
+						&& cal.get(Calendar.MINUTE) == 0
 						&& cal.get(Calendar.SECOND) == 0);
 			}
 		}
 		session.getTransaction().commit();
 		session.close();
-	
+
 		// test re-mapping of hour() and related HQL functions
 		session = sessionFactory.openSession();
 		session.beginTransaction();
-		int hr = (Integer) session.createQuery(
-				"select hour(date) from Event where id=1").uniqueResult();
+		int hr = (Integer) session.createQuery("select hour(date) from Event where id=1").uniqueResult();
 		assertEquals(14, hr);
 		session.getTransaction().commit();
 		session.close();
-		
+
+		// like operator
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+		resultList = session.createQuery("select id from Event where title like 'event%'").list();
+		assertEquals(1, resultList.size());
+		session.getTransaction().commit();
+		session.close();
+
+		// != operator
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+		resultList = session.createQuery("select id from Event where title != 'event2'").list();
+		assertEquals(1, resultList.size());
+		session.getTransaction().commit();
+		session.close();
+
+		// coalesce function
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+		String str = session.createQuery("select coalesce(description, title) from Event where id=2").uniqueResult()
+				.toString();
+		assertEquals("event2", str);
+		session.getTransaction().commit();
+		session.close();
+
 	}
-	
+
 }
