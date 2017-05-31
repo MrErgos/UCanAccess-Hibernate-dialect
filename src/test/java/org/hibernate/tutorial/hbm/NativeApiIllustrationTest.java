@@ -60,8 +60,7 @@ public class NativeApiIllustrationTest extends TestCase {
 			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
 		} catch (Exception e) {
 			// The registry would be destroyed by the SessionFactory, but we had
-			// trouble building the SessionFactory
-			// so destroy it manually.
+			// trouble building the SessionFactory so destroy it manually.
 			StandardServiceRegistryBuilder.destroy(registry);
 		}
 	}
@@ -85,8 +84,7 @@ public class NativeApiIllustrationTest extends TestCase {
 		session.getTransaction().commit();
 		session.close();
 
-		// verify that registerFunction is mapping HQL "current_date()" to
-		// Access "Date()"
+		// verify that registerFunction is mapping HQL "current_date()" to Access "Date()"
 		// also test concat() HQL function (maps to '+' operator)
 		session = sessionFactory.openSession();
 		session.beginTransaction();
@@ -106,8 +104,7 @@ public class NativeApiIllustrationTest extends TestCase {
 			if (event.getId() == 2) {
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(event.getDate());
-				assertTrue(cal.get(Calendar.HOUR_OF_DAY) == 0 
-						&& cal.get(Calendar.MINUTE) == 0
+				assertTrue(cal.get(Calendar.HOUR_OF_DAY) == 0 && cal.get(Calendar.MINUTE) == 0
 						&& cal.get(Calendar.SECOND) == 0);
 			}
 		}

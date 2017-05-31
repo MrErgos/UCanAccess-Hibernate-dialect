@@ -32,7 +32,7 @@ public class UCanAccessDialectIdentityColumnSupport extends IdentityColumnSuppor
 	public String getIdentityColumnString(int type) {
 		return "COUNTER";
 	}
-	
+
 	/*
 	 * public boolean supportsInsertSelectIdentity() { return true; // As
 	 * specified in NHibernate dialect }

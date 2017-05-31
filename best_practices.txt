@@ -10,7 +10,8 @@ In hibernate.cfg.xml use "globally_quoted_identifiers", e.g.,
 	@Lob
 	private String comments;
 
-# CURRENCY fields
-
+# money fields
+	
+	// auto-created columns will be DECIMAL() instead of CURRENCY
 	@Column(precision = 19, scale = 4)  // required, otherwise defaults to (19,2)
 	private BigDecimal fee;

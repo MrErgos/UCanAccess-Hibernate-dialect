@@ -36,7 +36,7 @@ public class UCanAccessDialect extends SQLServerDialect {
 		registerFunction("minute", new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "Minute(?1)"));
 		registerFunction("hour", new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "Hour(?1)"));
 	}
-	
+
 	// -----------------------
 	// IDENTITY column support
 	// -----------------------
@@ -55,17 +55,20 @@ public class UCanAccessDialect extends SQLServerDialect {
 	// return "COUNTER";
 	// }
 
-	private static final UCanAccessDialectIdentityColumnSupport IDENTITY_COLUMN_SUPPORT = 
+	private static final UCanAccessDialectIdentityColumnSupport IDENTITY_COLUMN_SUPPORT =
 			new UCanAccessDialectIdentityColumnSupport();
+
 	@Override
 	public IdentityColumnSupport getIdentityColumnSupport() {
 		return (IdentityColumnSupport) IDENTITY_COLUMN_SUPPORT;
 	}
-	
+
 	@Override
 	public boolean supportsSequences() {
-		// TODO Hibernate bug? It does call this method, but then it tries to use Sequences anyway.
-		// System.out.println("-> Hibernate is checking support for Sequences.");
+		// TODO Hibernate bug? It does call this method, but then it tries to
+		// use Sequences anyway.
+		// System.out.println("-> Hibernate is checking support for
+		// Sequences.");
 		return false;
 	}
 
