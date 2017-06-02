@@ -26,8 +26,12 @@ package org.hibernate.tutorial.hbm;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,6 +42,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
 
+import antlr.debug.NewLineEvent;
 import junit.framework.TestCase;
 
 /**
@@ -75,12 +80,21 @@ public class NativeApiIllustrationTest extends TestCase {
 	@SuppressWarnings("unchecked")
 	public void testBasicUsage() throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		// create a couple of events...
+		
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		session.save(new Event("Our very first event!", sdf.parse("2017-05-21 14:15:16")));
-		int new_id = (int) session.save(new Event("A follow up event", null));
-		assertEquals(2, new_id);
+		Integer maxEventId = (Integer) session.createQuery("select max(id) from Event").uniqueResult();
+		Query<?> qry = session.createQuery("delete from Event");
+		qry.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		
+		// create a couple of events...
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+		int eventId1 = (int) session.save(new Event("Our very first event!", sdf.parse("2017-05-21 14:15:16")));
+		int eventId2 = (int) session.save(new Event("A follow up event", null));
+		assertEquals((maxEventId == null ? 0 : maxEventId) + 2, eventId2);
 		session.getTransaction().commit();
 		session.close();
 
@@ -88,8 +102,8 @@ public class NativeApiIllustrationTest extends TestCase {
 		// also test concat() HQL function (maps to '+' operator)
 		session = sessionFactory.openSession();
 		session.beginTransaction();
-		Query<?> qry = session.createQuery(
-				"update Event set date=current_date(), title=concat('event', '2'), fee=:newfee where id=2");
+		qry = session.createQuery(
+				"update Event set date=current_date(), title=concat('event', '2'), fee=:newfee where id=" + eventId2);
 		qry.setParameter("newfee", new BigDecimal("123.45"));
 		qry.executeUpdate();
 		session.getTransaction().commit();
@@ -101,7 +115,7 @@ public class NativeApiIllustrationTest extends TestCase {
 		List<Event> resultList = session.createQuery("from Event").list();
 		for (Event event : (List<Event>) resultList) {
 			System.out.println("Event (" + event.getDate() + ") : " + event.getTitle());
-			if (event.getId() == 2) {
+			if (event.getId() == eventId2) {
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(event.getDate());
 				assertTrue(cal.get(Calendar.HOUR_OF_DAY) == 0 && cal.get(Calendar.MINUTE) == 0
@@ -114,7 +128,7 @@ public class NativeApiIllustrationTest extends TestCase {
 		// test re-mapping of hour() and related HQL functions
 		session = sessionFactory.openSession();
 		session.beginTransaction();
-		int hr = (Integer) session.createQuery("select hour(date) from Event where id=1").uniqueResult();
+		int hr = (Integer) session.createQuery("select hour(date) from Event where id=" + eventId1).uniqueResult();
 		assertEquals(14, hr);
 		session.getTransaction().commit();
 		session.close();
@@ -138,12 +152,43 @@ public class NativeApiIllustrationTest extends TestCase {
 		// coalesce function
 		session = sessionFactory.openSession();
 		session.beginTransaction();
-		String str = session.createQuery("select coalesce(description, title) from Event where id=2").uniqueResult()
-				.toString();
+		String str = session.createQuery("select coalesce(description, title) from Event where id=" + eventId2)
+				.uniqueResult().toString();
 		assertEquals("event2", str);
 		session.getTransaction().commit();
 		session.close();
 
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+		qry = session.createQuery("delete from Guest");
+		qry.executeUpdate();
+		session.getTransaction().commit();
+		session.close();
+		
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+		Guest gord = new Guest("Gord");
+		session.save(gord);
+		List<Event> eventList = session.createQuery("from Event").list();
+		assertEquals(2, eventList.size());
+//		gord.setEvents(eventList);
+//		session.save(gord);
+		for (Event evt : eventList) {
+			evt.getGuests().add(gord);
+//			evt.setGuests(Arrays.asList(gord));
+			session.save(evt);
+		}
+		session.getTransaction().commit();
+		session.close();
+
+//		session = sessionFactory.openSession();
+//		session.beginTransaction();
+////		Event e = (Event) session.createQuery("from Event where id=" + eventId2).uniqueResult();
+//		Event e = new Event("Yet another event", null);
+//		e.setGuests(Arrays.asList(gord));
+//		session.save(e);
+//		session.getTransaction().commit();
+//		session.close();
 	}
 
 }
