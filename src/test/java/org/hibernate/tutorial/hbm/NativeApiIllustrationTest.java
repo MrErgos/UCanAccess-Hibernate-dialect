@@ -51,11 +51,15 @@ public class NativeApiIllustrationTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		Logger.getLogger("org.hibernate").setLevel(Level.WARNING);
-
-		// A SessionFactory is set up once for an application!
-		final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-				.configure() // configures settings from hibernate.cfg.xml
-				.build();
+		
+		StandardServiceRegistryBuilder ssrb = new StandardServiceRegistryBuilder()
+				.configure(); // configures settings from hibernate.cfg.xml
+		// allow tester to specify their own connection URL (via -D JVM argument)
+		String runtimeUrl = System.getProperty("HIBERNATE_CONNECTION_URL"); 
+		if (runtimeUrl != null) {
+			ssrb.applySetting("hibernate.connection.url", runtimeUrl);
+		}
+		final StandardServiceRegistry registry = ssrb.build();
 		try {
 			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
 		} catch (Exception e) {
