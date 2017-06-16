@@ -86,6 +86,7 @@ public class Event {
 	}
 
 	// unspecified-length String -> VARCHAR(255) [via Hibernate] -> TEXT(255) [via UCanAccess]
+	@Column(unique = true)
 	private String description;
 
 	public String getDescription() {

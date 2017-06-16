@@ -17,10 +17,16 @@ package org.hibernate.custom.dialect.ucanaccess;
 
 import java.sql.Types;
 
+import javax.persistence.Column;
+
+import org.hibernate.boot.Metadata;
 import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.dialect.function.SQLFunctionTemplate;
 import org.hibernate.dialect.function.StandardSQLFunction;
 import org.hibernate.dialect.identity.IdentityColumnSupport;
+import org.hibernate.dialect.unique.DefaultUniqueDelegate;
+import org.hibernate.dialect.unique.UniqueDelegate;
+import org.hibernate.mapping.UniqueKey;
 import org.hibernate.type.StandardBasicTypes;
 
 public class UCanAccessDialect extends SQLServerDialect {
@@ -67,9 +73,15 @@ public class UCanAccessDialect extends SQLServerDialect {
 	public boolean supportsSequences() {
 		// TODO Hibernate bug? It does call this method, but then it tries to
 		// use Sequences anyway.
-		// System.out.println("-> Hibernate is checking support for
-		// Sequences.");
+		// System.out.println("-> Hibernate is checking support for Sequences.");
 		return false;
 	}
+	
+	private static final UCanAccessUniqueDelegate UNIQUE_DELEGATE =
+			new UCanAccessUniqueDelegate();
 
+	public UniqueDelegate getUniqueDelegate() {
+		return (UniqueDelegate) UNIQUE_DELEGATE;
+	}
+	
 }
