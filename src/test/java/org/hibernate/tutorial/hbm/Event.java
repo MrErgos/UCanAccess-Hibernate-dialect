@@ -31,11 +31,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "EVENTS")
+@Table(name = "EVENTS", indexes = {
+		@Index(columnList = "title", name = "IX_title"),
+		@Index(columnList = "EVENT DATE", name = "IX_date")
+		})
 public class Event {
 	@Id
 	@Column(name = "EVENT_ID")
