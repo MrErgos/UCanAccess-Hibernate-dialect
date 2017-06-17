@@ -108,6 +108,18 @@ public class Event {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
+	
+	// @Lob: BLOB
+	@Lob
+	private byte[] logo;
+	
+	public byte[] getLogo() {
+		return logo;
+	}
+	
+	public void setLogo(byte[] logo) {
+		this.logo = logo;
+	}
 
 	// Currency (actually mapped to DECIMAL in Access)
 	@Column(precision = 19, scale = 4) // required, otherwise defaults to (19,2)

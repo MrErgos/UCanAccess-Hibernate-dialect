@@ -34,6 +34,7 @@ public class UCanAccessDialect extends SQLServerDialect {
 		super();
 		registerColumnType(Types.INTEGER, "LONG");
 		registerColumnType(Types.CLOB, "MEMO");
+		registerColumnType(Types.BLOB, "OLE");
 
 		registerFunction("current_date", new StandardSQLFunction("Date", StandardBasicTypes.DATE));
 		registerFunction("current_time", new StandardSQLFunction("Time", StandardBasicTypes.TIME));

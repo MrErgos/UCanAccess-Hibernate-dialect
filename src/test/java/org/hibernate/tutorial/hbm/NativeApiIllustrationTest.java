@@ -23,6 +23,8 @@
  */
 package org.hibernate.tutorial.hbm;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.IOUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -77,12 +80,15 @@ public class NativeApiIllustrationTest extends TestCase {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void testBasicUsage() throws ParseException {
+	public void testBasicUsage() throws ParseException, IOException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		// create a couple of events...
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		session.save(new Event("Our very first event!", sdf.parse("2017-05-21 14:15:16")));
+		Event e1 = new Event("Our very first event!", sdf.parse("2017-05-21 14:15:16"));
+		InputStream inStream = NativeApiIllustrationTest.class.getClassLoader().getResourceAsStream("logo_96.png");
+		e1.setLogo(IOUtils.toByteArray(inStream));
+		session.save(e1);
 		int new_id = (int) session.save(new Event("A follow up event", null));
 		assertEquals(2, new_id);
 		session.getTransaction().commit();
