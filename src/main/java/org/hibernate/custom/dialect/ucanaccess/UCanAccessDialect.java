@@ -17,16 +17,12 @@ package org.hibernate.custom.dialect.ucanaccess;
 
 import java.sql.Types;
 
-import javax.persistence.Column;
-
-import org.hibernate.boot.Metadata;
 import org.hibernate.dialect.SQLServerDialect;
 import org.hibernate.dialect.function.SQLFunctionTemplate;
 import org.hibernate.dialect.function.StandardSQLFunction;
 import org.hibernate.dialect.identity.IdentityColumnSupport;
-import org.hibernate.dialect.unique.DefaultUniqueDelegate;
+import org.hibernate.dialect.pagination.LimitHandler;
 import org.hibernate.dialect.unique.UniqueDelegate;
-import org.hibernate.mapping.UniqueKey;
 import org.hibernate.type.StandardBasicTypes;
 
 public class UCanAccessDialect extends SQLServerDialect {
@@ -83,6 +79,13 @@ public class UCanAccessDialect extends SQLServerDialect {
 
 	public UniqueDelegate getUniqueDelegate() {
 		return (UniqueDelegate) UNIQUE_DELEGATE;
+	}
+	
+	private static final UCanAccessDialectLimitHandler LIMIT_HANDLER =
+			new UCanAccessDialectLimitHandler();
+
+	public LimitHandler getLimitHandler() {
+		return LIMIT_HANDLER;
 	}
 	
 }

@@ -98,10 +98,10 @@ public class NativeApiIllustrationTest extends TestCase {
 		// also test concat() HQL function (maps to '+' operator)
 		session = sessionFactory.openSession();
 		session.beginTransaction();
-		Query<?> qry = session.createQuery(
+		Query<?> updateQry = session.createQuery(
 				"update Event set date=current_date(), title=concat('event', '2'), fee=:newfee where id=2");
-		qry.setParameter("newfee", new BigDecimal("123.45"));
-		qry.executeUpdate();
+		updateQry.setParameter("newfee", new BigDecimal("123.45"));
+		updateQry.executeUpdate();
 		session.getTransaction().commit();
 		session.close();
 
@@ -151,6 +151,18 @@ public class NativeApiIllustrationTest extends TestCase {
 		String str = session.createQuery("select coalesce(description, title) from Event where id=2").uniqueResult()
 				.toString();
 		assertEquals("event2", str);
+		session.getTransaction().commit();
+		session.close();
+
+		// range query
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+		Query<?> rangeQry = session.createQuery("from Event order by id");
+		rangeQry.setFirstResult(1);  // zero-based
+		rangeQry.setMaxResults(1);
+		resultList = (List<Event>) rangeQry.list();
+		assertEquals(1, resultList.size());
+		assertEquals("event2", resultList.get(0).getTitle());
 		session.getTransaction().commit();
 		session.close();
 
