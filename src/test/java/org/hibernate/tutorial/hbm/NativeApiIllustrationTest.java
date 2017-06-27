@@ -166,6 +166,15 @@ public class NativeApiIllustrationTest extends TestCase {
 		session.getTransaction().commit();
 		session.close();
 
+		// count(distinct ...) query
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+		Query<?> countDistinctQry = session.createQuery("select count(distinct title) from Event");
+		long distinctCount = (long) countDistinctQry.uniqueResult();
+		assertEquals(2, distinctCount);
+		session.getTransaction().commit();
+		session.close();
+
 	}
 
 }
