@@ -26,6 +26,10 @@ import org.hibernate.type.StandardBasicTypes;
 public class UCanAccessDialect extends SQLServerDialect {
 	public UCanAccessDialect() {
 		super();
+		
+		// lets UCanAccess determine if it is working with Hibernate
+		System.setProperty(this.getClass().getName() + ".isActive", "true");
+		
 		registerColumnType(Types.INTEGER, "LONG");
 		registerColumnType(Types.CLOB, "MEMO");
 

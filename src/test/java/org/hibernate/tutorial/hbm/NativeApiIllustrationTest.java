@@ -55,7 +55,7 @@ public class NativeApiIllustrationTest extends TestCase {
 
 	@Override
 	protected void setUp() throws Exception {
-		Logger.getLogger("org.hibernate").setLevel(Level.WARNING);
+		Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
 
 		// A SessionFactory is set up once for an application!
 		final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
