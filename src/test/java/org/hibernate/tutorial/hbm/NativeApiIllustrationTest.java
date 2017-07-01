@@ -171,24 +171,22 @@ public class NativeApiIllustrationTest extends TestCase {
 		session.save(gord);
 		List<Event> eventList = session.createQuery("from Event").list();
 		assertEquals(2, eventList.size());
-//		gord.setEvents(eventList);
-//		session.save(gord);
 		for (Event evt : eventList) {
-			evt.getGuests().add(gord);
-//			evt.setGuests(Arrays.asList(gord));
+			evt.getGuests().add(gord);  // incremental add
 			session.save(evt);
 		}
 		session.getTransaction().commit();
 		session.close();
 
-//		session = sessionFactory.openSession();
-//		session.beginTransaction();
-////		Event e = (Event) session.createQuery("from Event where id=" + eventId2).uniqueResult();
-//		Event e = new Event("Yet another event", null);
-//		e.setGuests(Arrays.asList(gord));
-//		session.save(e);
-//		session.getTransaction().commit();
-//		session.close();
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+		Guest anne = new Guest("Anne");
+		session.save(anne);
+		Event e = new Event("Yet another event", null);
+		e.setGuests(Arrays.asList(new Guest[] { gord, anne }));  // whole new list
+		session.save(e);
+		session.getTransaction().commit();
+		session.close();
 	}
 
 }
