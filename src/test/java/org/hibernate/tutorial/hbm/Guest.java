@@ -34,6 +34,11 @@ public class Guest {
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
 	
+	@Column(length = 100)
+	private String title;
+	public String getTitle() { return title; }
+	public void setTitle(String title) { this.title = title; }
+	
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "guests")
 	private List<Event> events = new ArrayList<>();
 	public List<Event> getEvents() { return this.events; }
