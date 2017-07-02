@@ -41,6 +41,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "EVENTS")
@@ -58,6 +60,7 @@ public class Event {
 	@SuppressWarnings("unused")
 	private void setId(Integer id) { this.id = id; }
 
+	@Temporal(TemporalType.TIMESTAMP)
 	// Access databases *often* have spaces in column names
 	// ... see "globally_quoted_identifiers" property in hibernate.cfg.xml
 	@Column(name = "EVENT DATE")
