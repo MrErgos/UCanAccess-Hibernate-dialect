@@ -94,7 +94,7 @@ public class Event {
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "EVENTS_Guest", 
 			joinColumns = { @JoinColumn(name = "EVENT_ID") },
-			inverseJoinColumns = { @JoinColumn(name = "GUEST_ID") })
+			inverseJoinColumns = { @JoinColumn(name = "email") })
 	private List<Guest> guests = new ArrayList<>();
 	public List<Guest> getGuests() { return this.guests; }
 	public void setGuests(List<Guest> guests) { this.guests = guests; }

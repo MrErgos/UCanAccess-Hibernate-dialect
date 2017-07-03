@@ -16,19 +16,18 @@ import javax.persistence.ManyToMany;
 @Entity
 public class Guest {
 	@Id
-	@Column(name = "GUEST_ID")
+	@Column(name = "email", length = 255)
 //	@GeneratedValue // (currently not working)
 //	@GeneratedValue (strategy = GenerationType.AUTO) // (currently not working)
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	// previously (before adding IdentityColumnSupport) ...
 	// @GenericGenerator(name="Event_AutoNumber_generator", strategy="increment")
 	// @GeneratedValue(generator="Event_AutoNumber_generator")
-	private Integer id;
-	public Integer getId() { return id; }
+	private String email;
+	public String getEmail() { return email; }
 	@SuppressWarnings("unused")
-	private void setId(Integer id) { this.id = id; }
+	private void setId(String email) { this.email = email; }
 
-	// limited-length String -> VARCHAR(100) [via Hibernate] -> TEXT(100) [via UCanAccess]
 	@Column(length = 100)
 	private String name;
 	public String getName() { return name; }
@@ -46,9 +45,13 @@ public class Guest {
 
 	public Guest() { }
 	
-	public Guest(String name) { this.name = name; }
+	public Guest(String email, String name) {
+		this.email = email;
+		this.name = name; 
+		}
 	
-	public Guest(String name, List<Event> events) {
+	public Guest(String email, String name, List<Event> events) {
+		this.email = email;
 		this.name = name;
 		this.events = events;
 	}

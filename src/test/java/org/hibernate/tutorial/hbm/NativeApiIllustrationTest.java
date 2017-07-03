@@ -55,7 +55,7 @@ public class NativeApiIllustrationTest extends TestCase {
 
 	@Override
 	protected void setUp() throws Exception {
-		Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
+		Logger.getLogger("org.hibernate").setLevel(Level.WARNING);
 
 		// A SessionFactory is set up once for an application!
 		final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -167,7 +167,7 @@ public class NativeApiIllustrationTest extends TestCase {
 		
 		session = sessionFactory.openSession();
 		session.beginTransaction();
-		Guest gord = new Guest("Gord");
+		Guest gord = new Guest("gord@example.com", "Gord");
 		session.save(gord);
 		List<Event> eventList = session.createQuery("from Event").list();
 		assertEquals(2, eventList.size());
@@ -180,7 +180,7 @@ public class NativeApiIllustrationTest extends TestCase {
 
 		session = sessionFactory.openSession();
 		session.beginTransaction();
-		Guest anne = new Guest("Anne");
+		Guest anne = new Guest("anne@example.com", "Anne");
 		session.save(anne);
 		Event e = new Event("Yet another event", null);
 		e.setGuests(Arrays.asList(new Guest[] { gord, anne }));  // whole new list

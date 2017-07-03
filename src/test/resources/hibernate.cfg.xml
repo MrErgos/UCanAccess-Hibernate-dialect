@@ -29,7 +29,7 @@
 		
 		https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#configurations-hbmddl
 		-->
-		<property name="hbm2ddl.auto">update</property>
+		<property name="hbm2ddl.auto">create</property>
 		
 		<!-- [alternative HSQLDB configuration for dev]
 		<property name="connection.driver_class">org.hsqldb.jdbc.JDBCDriver</property>
