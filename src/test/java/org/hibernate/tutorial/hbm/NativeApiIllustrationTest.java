@@ -184,8 +184,14 @@ public class NativeApiIllustrationTest extends TestCase {
 		session.save(anne);
 		Event e = new Event("Yet another event", null);
 		e.setGuests(Arrays.asList(new Guest[] { gord, anne }));  // whole new list
-		session.save(e);
+		int eventId3 = (int) session.save(e);
 		session.getTransaction().commit();
+		//
+		// test IN clause with list
+		qry = session.createQuery("from Event where id in :id_list");
+		qry.setParameter("id_list", Arrays.asList(new Integer[] { eventId1, eventId3 }));
+		eventList = (List<Event>) qry.list();
+		assertEquals(2, eventList.size());
 		session.close();
 	}
 
