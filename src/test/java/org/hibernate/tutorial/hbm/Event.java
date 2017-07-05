@@ -24,16 +24,26 @@
 package org.hibernate.tutorial.hbm;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "EVENTS", indexes = {
@@ -50,65 +60,36 @@ public class Event {
 	// @GenericGenerator(name="Event_AutoNumber_generator", strategy="increment")
 	// @GeneratedValue(generator="Event_AutoNumber_generator")
 	private Integer id;
-
-	public Integer getId() {
-		return id;
-	}
-
+	public Integer getId() { return id; }
 	@SuppressWarnings("unused")
-	private void setId(Integer id) {
-		this.id = id;
-	}
+	private void setId(Integer id) { this.id = id; }
 
+	@Temporal(TemporalType.TIMESTAMP)
 	// Access databases *often* have spaces in column names
 	// ... see "globally_quoted_identifiers" property in hibernate.cfg.xml
 	@Column(name = "EVENT DATE")
 	private Date date;
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
+	public Date getDate() { return date; }
+	public void setDate(Date date) { this.date = date; }
 
 	// limited-length String -> VARCHAR(100) [via Hibernate] -> TEXT(100) [via UCanAccess]
 	@Column(length = 100)
 	private String title;
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
+	public String getTitle() { return title; }
+	public void setTitle(String title) { this.title = title; }
 
 	// unspecified-length String -> VARCHAR(255) [via Hibernate] -> TEXT(255) [via UCanAccess]
 	@Column(unique = true)
 	private String description;
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	public String getDescription() { return description; }
+	public void setDescription(String description) { this.description = description; }
 
 	// @Lob: unlimited-length String -> CLOB (via Hibernate) -> MEMO (via UCanAccess)
 	@Lob
 	private String comments;
+	public String getComments() { return comments; }
+	public void setComments(String comments) { this.comments = comments; }
 
-	public String getComments() {
-		return comments;
-	}
-
-	public void setComments(String comments) {
-		this.comments = comments;
-	}
-	
 	// @Lob: BLOB
 	@Lob
 	private byte[] logo;
@@ -124,15 +105,17 @@ public class Event {
 	// Currency (actually mapped to DECIMAL in Access)
 	@Column(precision = 19, scale = 4) // required, otherwise defaults to (19,2)
 	private BigDecimal fee;
+	public BigDecimal getFee() { return fee; }
+	public void setFee(BigDecimal fee) { this.fee = fee; }
 
-	public BigDecimal getFee() {
-		return fee;
-	}
-
-	public void setFee(BigDecimal fee) {
-		this.fee = fee;
-	}
-
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "EVENTS_Guest", 
+			joinColumns = { @JoinColumn(name = "EVENT_ID") },
+			inverseJoinColumns = { @JoinColumn(name = "email") })
+	private List<Guest> guests = new ArrayList<>();
+	public List<Guest> getGuests() { return this.guests; }
+	public void setGuests(List<Guest> guests) { this.guests = guests; }
+	
 	public Event() {
 		// this form used by Hibernate
 	}
