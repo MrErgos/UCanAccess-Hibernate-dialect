@@ -20,7 +20,7 @@
 		</property>
 		<property name="connection.username"></property>
 		<property name="connection.password"/>
-		<property name="dialect">org.hibernate.custom.dialect.ucanaccess.UCanAccessDialect</property>
+		<property name="dialect">net.ucanaccess.hibernate.dialect.UCanAccessDialect</property>
 		
 		<!--
 		Automatic schema generation. Possible values:

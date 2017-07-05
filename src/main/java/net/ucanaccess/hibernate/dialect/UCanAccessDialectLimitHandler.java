@@ -1,4 +1,4 @@
-package org.hibernate.custom.dialect.ucanaccess;
+package net.ucanaccess.hibernate.dialect;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

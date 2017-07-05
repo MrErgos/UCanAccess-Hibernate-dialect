@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package org.hibernate.custom.dialect.ucanaccess;
+package net.ucanaccess.hibernate.dialect;
 
 import java.sql.Types;
 
@@ -30,10 +30,7 @@ public class UCanAccessDialect extends SQLServerDialect {
 		super();
 		
 		// lets UCanAccess determine if it is working with Hibernate
-		//TODO re-enable derivation after package renaming ...
-		// System.setProperty(this.getClass().getName() + ".isActive", "true");
-		// ... for now,
-		System.setProperty("net.ucanaccess.hibernate.dialect.UCanAccessDialect.isActive", "true");
+		System.setProperty(this.getClass().getName() + ".isActive", "true");
 		
 		registerColumnType(Types.INTEGER, "LONG");
 		registerColumnType(Types.CLOB, "MEMO");
@@ -81,8 +78,8 @@ public class UCanAccessDialect extends SQLServerDialect {
 		return false;
 	}
 	
-	private static final UCanAccessUniqueDelegate UNIQUE_DELEGATE =
-			new UCanAccessUniqueDelegate();
+	private static final UCanAccessDialectUniqueDelegate UNIQUE_DELEGATE =
+			new UCanAccessDialectUniqueDelegate();
 
 	public UniqueDelegate getUniqueDelegate() {
 		return (UniqueDelegate) UNIQUE_DELEGATE;

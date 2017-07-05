@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package org.hibernate.custom.dialect.ucanaccess;
+package net.ucanaccess.hibernate.dialect;
 
 import org.hibernate.dialect.identity.IdentityColumnSupportImpl;
 
