@@ -1,4 +1,4 @@
-*(Note: This branch is a work in progress.)*
+*(Note: This branch is a work in progress. It currently depends on a pre-release version of UCanAccess.)*
 
 This is a sub-project of [UCanAccess](https://sourceforge.net/projects/ucanaccess/) to support development of a Hibernate dialect.
 

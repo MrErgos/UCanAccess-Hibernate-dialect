@@ -2,7 +2,7 @@
 
 In hibernate.cfg.xml use "globally_quoted_identifiers", e.g.,
 
-	<property name="dialect">org.hibernate.custom.dialect.ucanaccess.UCanAccessDialect</property>
+	<property name="dialect">net.ucanaccess.hibernate.dialect.UCanAccessDialect</property>
 	<property name="globally_quoted_identifiers">true</property>
 
 # MEMO fields

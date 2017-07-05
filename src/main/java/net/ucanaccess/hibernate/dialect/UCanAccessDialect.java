@@ -25,6 +25,11 @@ import org.hibernate.dialect.pagination.LimitHandler;
 import org.hibernate.dialect.unique.UniqueDelegate;
 import org.hibernate.type.StandardBasicTypes;
 
+/**
+ * 
+ * Hibernate dialect for UCanAccess
+ * 
+ */
 public class UCanAccessDialect extends SQLServerDialect {
 	public UCanAccessDialect() {
 		super();

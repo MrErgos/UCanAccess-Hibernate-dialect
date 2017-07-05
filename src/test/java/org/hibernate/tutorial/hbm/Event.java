@@ -27,8 +27,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,6 +43,15 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+ * 
+ * Event entity - an event that will be attended by one or more Guests
+ * 
+ * This object is the "owner" side of the many-to-many relationship with the Guest entity
+ * 
+ * For details on "owner side" vs. "inverse side", see https://stackoverflow.com/a/19291538/2144390
+ *
+ */
 @Entity
 @Table(name = "EVENTS", indexes = {
 		@Index(columnList = "title", name = "IX_title"),
@@ -117,7 +124,7 @@ public class Event {
 	public void setGuests(List<Guest> guests) { this.guests = guests; }
 	
 	public Event() {
-		// this form used by Hibernate
+		// no-argument constructor required by Hibernate
 	}
 
 	public Event(String title, Date date) {
