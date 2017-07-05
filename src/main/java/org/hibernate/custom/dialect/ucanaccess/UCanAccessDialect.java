@@ -31,7 +31,7 @@ public class UCanAccessDialect extends SQLServerDialect {
 		//TODO re-enable derivation after package renaming ...
 		// System.setProperty(this.getClass().getName() + ".isActive", "true");
 		// ... for now,
-		System.setProperty("net.ucanaccess.hibernate.custom.dialect.UCanAccessDialect.isActive", "true");
+		System.setProperty("net.ucanaccess.hibernate.dialect.UCanAccessDialect.isActive", "true");
 		
 		registerColumnType(Types.INTEGER, "LONG");
 		registerColumnType(Types.CLOB, "MEMO");
