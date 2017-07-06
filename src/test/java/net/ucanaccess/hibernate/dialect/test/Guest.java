@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.hibernate.tutorial.hbm;
+package net.ucanaccess.hibernate.dialect.test;
 
 import java.util.ArrayList;
 import java.util.List;

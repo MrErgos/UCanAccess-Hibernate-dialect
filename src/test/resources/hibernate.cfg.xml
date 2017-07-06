@@ -31,16 +31,6 @@
 		-->
 		<property name="hbm2ddl.auto">create</property>
 		
-		<!-- [alternative HSQLDB configuration for dev]
-		<property name="connection.driver_class">org.hsqldb.jdbc.JDBCDriver</property>
-		<property name="connection.url">
-			jdbc:hsqldb:file:C:/__tmp/hsqldb/UCanHibernate
-		</property>
-		<property name="connection.username">SA</property>
-		<property name="connection.password"/>
-		<property name="dialect">org.hibernate.dialect.HSQLDialect</property>
-		-->
-		
 		<!-- JDBC connection pool (use the built-in) -->
 		<property name="connection.pool_size">1</property>
 
@@ -54,11 +44,11 @@
 		<property name="show_sql">true</property>
 		<property name="format_sql">false</property>
 
-		<!-- (disabled in favour of <mapping class ...> and annotations)
+		<!-- (original .hbm.xml approach replaced with <mapping class ...> and annotations)
 		<mapping resource="org/hibernate/tutorial/hbm/Event.hbm.xml"/>
 		-->
-		<mapping class="org.hibernate.tutorial.hbm.Event"/>
-		<mapping class="org.hibernate.tutorial.hbm.Guest"/>
+		<mapping class="net.ucanaccess.hibernate.dialect.test.Event"/>
+		<mapping class="net.ucanaccess.hibernate.dialect.test.Guest"/>
 
 	</session-factory>
 

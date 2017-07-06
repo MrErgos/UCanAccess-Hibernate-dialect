@@ -21,19 +21,16 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.hibernate.tutorial.hbm;
+package net.ucanaccess.hibernate.dialect.test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,7 +42,6 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
 
-import antlr.debug.NewLineEvent;
 import junit.framework.TestCase;
 
 /**
@@ -62,11 +58,13 @@ public class NativeApiIllustrationTest extends TestCase {
 		
 		StandardServiceRegistryBuilder ssrb = new StandardServiceRegistryBuilder()
 				.configure(); // configures settings from hibernate.cfg.xml
+		
 		// allow tester to specify their own connection URL (via -D JVM argument)
 		String runtimeUrl = System.getProperty("HIBERNATE_CONNECTION_URL"); 
 		if (runtimeUrl != null) {
 			ssrb.applySetting("hibernate.connection.url", runtimeUrl);
 		}
+		
 		final StandardServiceRegistry registry = ssrb.build();
 		try {
 			sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
@@ -113,13 +111,14 @@ public class NativeApiIllustrationTest extends TestCase {
 		session = sessionFactory.openSession();
 		session.beginTransaction();
 		qry = session.createQuery(
-				"update Event set date=current_date(), title=concat('event', '2'), fee=:newfee where id=" + eventId2);
+				"update Event set date=current_date(), title=concat('event', '2'), fee=:newfee where id=:id2");
 		qry.setParameter("newfee", new BigDecimal("123.45"));
+		qry.setParameter("id2", eventId2);
 		qry.executeUpdate();
 		session.getTransaction().commit();
 		session.close();
 
-		// now lets pull events from the database and list them
+		// now let's pull events from the database and list them
 		session = sessionFactory.openSession();
 		session.beginTransaction();
 		List<Event> resultList = session.createQuery("from Event").list();
@@ -138,7 +137,9 @@ public class NativeApiIllustrationTest extends TestCase {
 		// test re-mapping of hour() and related HQL functions
 		session = sessionFactory.openSession();
 		session.beginTransaction();
-		int hr = (Integer) session.createQuery("select hour(date) from Event where id=" + eventId1).uniqueResult();
+		qry = session.createQuery("select hour(date) from Event where id=:id1");
+		qry.setParameter("id1", eventId1);
+		int hr = (Integer) qry.uniqueResult();
 		assertEquals(14, hr);
 		session.getTransaction().commit();
 		session.close();
@@ -162,8 +163,9 @@ public class NativeApiIllustrationTest extends TestCase {
 		// coalesce function
 		session = sessionFactory.openSession();
 		session.beginTransaction();
-		String str = session.createQuery("select coalesce(description, title) from Event where id=" + eventId2)
-				.uniqueResult().toString();
+		qry = session.createQuery("select coalesce(description, title) from Event where id=:id2");
+		qry.setParameter("id2", eventId2);
+		String str = qry.uniqueResult().toString();
 		assertEquals("event2", str);
 		session.getTransaction().commit();
 		session.close();

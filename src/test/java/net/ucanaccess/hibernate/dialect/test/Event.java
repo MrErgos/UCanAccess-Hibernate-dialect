@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor
  * Boston, MA  02110-1301  USA
  */
-package org.hibernate.tutorial.hbm;
+package net.ucanaccess.hibernate.dialect.test;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -100,14 +100,8 @@ public class Event {
 	// @Lob: BLOB
 	@Lob
 	private byte[] logo;
-	
-	public byte[] getLogo() {
-		return logo;
-	}
-	
-	public void setLogo(byte[] logo) {
-		this.logo = logo;
-	}
+	public byte[] getLogo() { return logo; }
+	public void setLogo(byte[] logo) { this.logo = logo; }
 
 	// Currency (actually mapped to DECIMAL in Access)
 	@Column(precision = 19, scale = 4) // required, otherwise defaults to (19,2)
