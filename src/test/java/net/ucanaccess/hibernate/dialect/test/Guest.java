@@ -55,10 +55,9 @@ public class Guest {
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
 	
-	@Column(length = 100)
-	private String title;
-	public String getTitle() { return title; }
-	public void setTitle(String title) { this.title = title; }
+	private boolean vip;
+	public boolean getVip() { return vip; }
+	public void setVip(boolean vip) { this.vip= vip; }
 	
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "guests")
 	private List<Event> events = new ArrayList<>();

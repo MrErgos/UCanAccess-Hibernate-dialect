@@ -122,7 +122,7 @@ public class NativeApiIllustrationTest extends TestCase {
 		session = sessionFactory.openSession();
 		session.beginTransaction();
 		List<Event> resultList = session.createQuery("from Event").list();
-		for (Event event : (List<Event>) resultList) {
+		for (Event event : resultList) {
 			System.out.println("Event (" + event.getDate() + ") : " + event.getTitle());
 			if (event.getId() == eventId2) {
 				Calendar cal = Calendar.getInstance();
@@ -214,10 +214,11 @@ public class NativeApiIllustrationTest extends TestCase {
 		session = sessionFactory.openSession();
 		session.beginTransaction();
 		Guest anne = new Guest("anne@example.com", "Anne");
+		anne.setVip(true);
 		session.save(anne);
-		Event e = new Event("Yet another event", null);
-		e.setGuests(Arrays.asList(new Guest[] { gord, anne }));  // whole new list
-		int eventId3 = (int) session.save(e);
+		Event evt3 = new Event("Yet another event", null);
+		evt3.setGuests(Arrays.asList(new Guest[] { gord, anne }));  // whole new list
+		int eventId3 = (int) session.save(evt3);
 		session.getTransaction().commit();
 		//
 		// test IN clause with list
@@ -225,6 +226,11 @@ public class NativeApiIllustrationTest extends TestCase {
 		qry.setParameter("id_list", Arrays.asList(new Integer[] { eventId1, eventId3 }));
 		eventList = (List<Event>) qry.list();
 		assertEquals(2, eventList.size());
+		//
+		// list Guests for a particular Event
+		for (Guest gst : evt3.getGuests()) {
+			System.out.printf("%s (VIP: %s)%n", gst.getName(), gst.getVip());
+		}
 		session.close();
 	}
 

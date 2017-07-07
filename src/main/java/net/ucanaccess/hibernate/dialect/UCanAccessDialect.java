@@ -38,6 +38,7 @@ public class UCanAccessDialect extends SQLServerDialect {
 		System.setProperty(this.getClass().getName() + ".isActive", "true");
 		
 		registerColumnType(Types.INTEGER, "LONG");
+		registerColumnType(Types.BOOLEAN, "YESNO");
 		registerColumnType(Types.CLOB, "MEMO");
 		registerColumnType(Types.BLOB, "OLE");
 
