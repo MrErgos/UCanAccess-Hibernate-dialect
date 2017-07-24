@@ -3,7 +3,7 @@
   ~ Hibernate, Relational Persistence for Idiomatic Java
   ~
   ~ License: GNU Lesser General Public License (LGPL), version 2.1 or later.
-  ~ See the lgpl.txt file in the root directory or <http://www.gnu.org/licenses/lgpl-2.1.html>.
+  ~ See <http://www.gnu.org/licenses/lgpl-2.1.html>.
   -->
 <!DOCTYPE hibernate-configuration PUBLIC
 		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
@@ -13,18 +13,21 @@
 
 	<session-factory>
 
-		<!-- Database connection properties -->
-		<property name="dialect">net.ucanaccess.hibernate.dialect.UCanAccessDialect</property>
-		<!-- "driver_class" may not be needed for modern (JDBC 4+) applications  
+		<!-- "driver_class" may not be needed for modern (JDBC 4+) applications.  
 		<property name="connection.driver_class">net.ucanaccess.jdbc.UcanaccessDriver</property>
 		-->
+		
+		<!-- essential database connection properties -->
+		<property name="dialect">
+			net.ucanaccess.hibernate.dialect.UCanAccessDialect
+		</property>
 		<property name="connection.url">
 			jdbc:ucanaccess://C:/Users/Public/UCanHibernate.accdb;newDatabaseVersion=V2010
 		</property>
 		<property name="connection.username"></property>
-		<property name="connection.password"/>
+		<property name="connection.password"></property>
 		
-		<!-- protect against table/column names with spaces, etc. -->
+		<!-- protect against table and column names with spaces, "funny characters", etc. -->
 		<property name="globally_quoted_identifiers">true</property>
 
 		<!-- Automatic schema generation. Possible values:
