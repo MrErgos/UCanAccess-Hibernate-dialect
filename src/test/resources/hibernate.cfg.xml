@@ -14,28 +14,28 @@
 	<session-factory>
 
 		<!-- Database connection properties -->
+		<property name="dialect">net.ucanaccess.hibernate.dialect.UCanAccessDialect</property>
+		<!-- "driver_class" may not be needed for modern (JDBC 4+) applications  
 		<property name="connection.driver_class">net.ucanaccess.jdbc.UcanaccessDriver</property>
+		-->
 		<property name="connection.url">
 			jdbc:ucanaccess://C:/Users/Public/UCanHibernate.accdb;newDatabaseVersion=V2010
 		</property>
 		<property name="connection.username"></property>
 		<property name="connection.password"/>
-		<property name="dialect">net.ucanaccess.hibernate.dialect.UCanAccessDialect</property>
 		
-		<!--
-		Automatic schema generation. Possible values:
-		
-		none (default value), create-only, drop, create, create-drop, validate, and update
+		<!-- protect against table/column names with spaces, etc. -->
+		<property name="globally_quoted_identifiers">true</property>
+
+		<!-- Automatic schema generation. Possible values:
+				none (default value), create-only, drop, create, create-drop, validate, and update
 		
 		https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#configurations-hbmddl
 		-->
 		<property name="hbm2ddl.auto">create</property>
 		
-		<!-- JDBC connection pool (use the built-in) -->
+		<!-- JDBC connection pool (use the built-in for test purposes) -->
 		<property name="connection.pool_size">1</property>
-
-		<!-- protect against table/column names with spaces, etc. -->
-		<property name="globally_quoted_identifiers">true</property>
 
 		<!-- Disable the second-level cache  -->
 		<property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
@@ -44,9 +44,7 @@
 		<property name="show_sql">true</property>
 		<property name="format_sql">false</property>
 
-		<!-- (original .hbm.xml approach replaced with <mapping class ...> and annotations)
-		<mapping resource="org/hibernate/tutorial/hbm/Event.hbm.xml"/>
-		-->
+		<!-- List of the classes we want Hibernate to recognize as Entities -->
 		<mapping class="net.ucanaccess.hibernate.dialect.test.Event"/>
 		<mapping class="net.ucanaccess.hibernate.dialect.test.Guest"/>
 
