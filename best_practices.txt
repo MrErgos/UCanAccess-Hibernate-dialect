@@ -1,17 +1,26 @@
-# Protection against column names with spaces, keywords, etc.
+## Protection against column names with spaces, keywords, etc.
 
-In hibernate.cfg.xml use "globally_quoted_identifiers", e.g.,
+In `hibernate.cfg.xml` use the "globally_quoted_identifiers" property, e.g.,
 
-	<property name="dialect">net.ucanaccess.hibernate.dialect.UCanAccessDialect</property>
-	<property name="globally_quoted_identifiers">true</property>
+~~~xml
+<property name="dialect">net.ucanaccess.hibernate.dialect.UCanAccessDialect</property>
+<property name="globally_quoted_identifiers">true</property>
+~~~
+&nbsp;
 
-# MEMO fields
+## MEMO fields
 
-	@Lob
-	private String comments;
+~~~java
+@Lob
+private String comments;
+~~~
+&nbsp;
 
-# money fields
-	
-	// auto-created columns will be DECIMAL() instead of CURRENCY
-	@Column(precision = 19, scale = 4)  // required, otherwise defaults to (19,2)
-	private BigDecimal fee;
+## money fields
+
+~~~java
+// auto-created columns will be DECIMAL() instead of CURRENCY
+@Column(precision = 19, scale = 4)  // required, otherwise defaults to (19,2)
+private BigDecimal fee;
+~~~
+&nbsp;
