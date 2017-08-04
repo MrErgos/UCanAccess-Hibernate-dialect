@@ -54,7 +54,8 @@ public class NativeApiIllustrationTest extends TestCase {
 
 	@Override
 	protected void setUp() throws Exception {
-		Logger.getLogger("org.hibernate").setLevel(Level.WARNING);
+		Logger myLogger = Logger.getLogger("org.hibernate"); 
+		myLogger.setLevel(Level.SEVERE);
 		
 		StandardServiceRegistryBuilder ssrb = new StandardServiceRegistryBuilder()
 				.configure(); // configures settings from hibernate.cfg.xml
