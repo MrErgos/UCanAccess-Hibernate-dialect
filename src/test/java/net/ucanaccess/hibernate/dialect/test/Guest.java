@@ -25,6 +25,7 @@ package net.ucanaccess.hibernate.dialect.test;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,40 +43,40 @@ import javax.persistence.ManyToMany;
  */
 @Entity
 public class Guest {
-	@Id
-	// an example of a non-identity (i.e., not AutoNumber) primary key
-	@Column(name = "email", length = 255)
-	private String email;
-	public String getEmail() { return email; }
-	@SuppressWarnings("unused")
-	private void setId(String email) { this.email = email; }
+    @Id
+    // an example of a non-identity (i.e., not AutoNumber) primary key
+    @Column(name = "email", length = 255)
+    private String email;
+    public String getEmail() { return email; }
+    @SuppressWarnings("unused")
+    private void setId(String email) { this.email = email; }
 
-	@Column(length = 100)
-	private String name;
-	public String getName() { return name; }
-	public void setName(String name) { this.name = name; }
-	
-	private boolean vip;
-	public boolean getVip() { return vip; }
-	public void setVip(boolean vip) { this.vip= vip; }
-	
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "guests")
-	private List<Event> events = new ArrayList<>();
-	public List<Event> getEvents() { return this.events; }
-	public void setEvents(List<Event> events) { this.events = events; }
+    @Column(length = 100)
+    private String name;
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    
+    private boolean vip;
+    public boolean getVip() { return vip; }
+    public void setVip(boolean vip) { this.vip= vip; }
+    
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "guests")
+    private List<Event> events = new ArrayList<>();
+    public List<Event> getEvents() { return this.events; }
+    public void setEvents(List<Event> events) { this.events = events; }
 
-	public Guest() {
-		// no-argument constructor required by Hibernate
-	}
-	
-	public Guest(String email, String name) {
-		this.email = email;
-		this.name = name; 
-		}
-	
-	public Guest(String email, String name, List<Event> events) {
-		this.email = email;
-		this.name = name;
-		this.events = events;
-	}
+    public Guest() {
+        // no-argument constructor required by Hibernate
+    }
+    
+    public Guest(String email, String name) {
+        this.email = email;
+        this.name = name; 
+        }
+    
+    public Guest(String email, String name, List<Event> events) {
+        this.email = email;
+        this.name = name;
+        this.events = events;
+    }
 }
