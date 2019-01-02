@@ -24,8 +24,8 @@
 package net.ucanaccess.hibernate.dialect.test;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -41,8 +41,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  * 
@@ -72,13 +70,12 @@ public class Event {
     @SuppressWarnings("unused")
     private void setId(Integer id) { this.id = id; }
 
-    @Temporal(TemporalType.TIMESTAMP)
     // Access databases *often* have spaces in column names
     // ... see "globally_quoted_identifiers" property in hibernate.cfg.xml
     @Column(name = "EVENT DATE")
-    private Date date;
-    public Date getDate() { return date; }
-    public void setDate(Date date) { this.date = date; }
+    private LocalDateTime date;
+    public LocalDateTime getDate() { return date; }
+    public void setDate(LocalDateTime date) { this.date = date; }
 
     // limited-length String -> VARCHAR(100) [via Hibernate] -> TEXT(100) [via UCanAccess]
     @Column(length = 100)
@@ -122,7 +119,7 @@ public class Event {
         // no-argument constructor required by Hibernate
     }
 
-    public Event(String title, Date date) {
+    public Event(String title, LocalDateTime date) {
         // for application use, to create new events
         this.title = title;
         this.date = date;

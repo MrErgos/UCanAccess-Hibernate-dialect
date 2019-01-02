@@ -27,9 +27,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,6 +69,7 @@ public class NativeApiIllustrationTest extends TestCase {
         try {
             sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
         } catch (Exception e) {
+            myLogger.log(Level.SEVERE, e.getMessage());
             // The registry would be destroyed by the SessionFactory, but we had
             // trouble building the SessionFactory so destroy it manually.
             StandardServiceRegistryBuilder.destroy(registry);
@@ -85,8 +85,6 @@ public class NativeApiIllustrationTest extends TestCase {
 
     @SuppressWarnings("unchecked")
     public void testBasicUsage() throws ParseException, IOException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Integer maxEventId = (Integer) session.createQuery("select max(id) from Event").uniqueResult();
@@ -98,7 +96,7 @@ public class NativeApiIllustrationTest extends TestCase {
         // create a couple of events...
         session = sessionFactory.openSession();
         session.beginTransaction();
-        Event e1 = new Event("Our very first event!", sdf.parse("2017-05-21 14:15:16"));
+        Event e1 = new Event("Our very first event!", LocalDateTime.of(2017, 5, 21, 14, 15, 16));
         InputStream inStream = NativeApiIllustrationTest.class.getClassLoader().getResourceAsStream("logo_96.png");
         e1.setLogo(IOUtils.toByteArray(inStream));
         int eventId1 = (int) session.save(e1);
@@ -126,10 +124,8 @@ public class NativeApiIllustrationTest extends TestCase {
         for (Event event : resultList) {
             System.out.println("Event (" + event.getDate() + ") : " + event.getTitle());
             if (event.getId() == eventId2) {
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(event.getDate());
-                assertTrue(cal.get(Calendar.HOUR_OF_DAY) == 0 && cal.get(Calendar.MINUTE) == 0
-                        && cal.get(Calendar.SECOND) == 0);
+                LocalDateTime ldt = event.getDate(); 
+                assertTrue(ldt.getHour() == 0 && ldt.getMinute() == 0 && ldt.getSecond() == 0);
             }
         }
         session.getTransaction().commit();
