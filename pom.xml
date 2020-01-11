@@ -19,10 +19,10 @@
 	</licenses>
 	<developers>
 		<developer>
-			<name>Gord Thompson</name>
-			<email>gord@gordthompson.com</email>
-			<organization>Gordon D. Thompson</organization>
-			<organizationUrl>http://www.gordthompson.com</organizationUrl>
+			<name>Nobody</name>
+			<email>nobody@example.com</email>
+			<organization>None</organization>
+			<organizationUrl>http://www.example.com</organizationUrl>
 		</developer>
 	</developers>
 	<scm>
@@ -87,7 +87,7 @@
 		<dependency>
 			<groupId>net.sf.ucanaccess</groupId>
 			<artifactId>ucanaccess</artifactId>
-			<version>5.0.0-SNAPSHOT</version>
+			<version>5.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
